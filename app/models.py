@@ -243,22 +243,26 @@ class Veterinary(models.Model):
         self.phone = veterinary_data.get("phone", "") or self.phone
 
         self.save()
+ 
 
-def validate_medicine(data):
+def validate_medicine(medicine_data):
     errors = {}
+    name = medicine_data.get("name")
+    description = medicine_data.get("description")
+    dose = medicine_data.get("dose")
 
-    name = data.get("name", "")
-    description = data.get("description", "")
-    dose = data.get("dose", "")
+    if not name:
+        errors["name"] = "El nombre es obligatorio."
 
-    if name == "":
-        errors["name"] = "Por favor ingrese un nombre"
+    if not description:
+        errors["description"] = "La descripción es obligatoria."
 
-    if description == "":
-        errors["description"] = "Por favor ingrese una descripción"
-
-    if dose == "":
-        errors["dose"] = "Por favor ingrese una dosis"
+    try:
+        dose = int(dose)
+        if dose <= 0:
+            errors["dose"] = "La dosis debe ser mayor a 0."
+    except (TypeError, ValueError):
+        errors["dose"] = "La dosis debe ser un número entero válido."
 
     return errors
     
