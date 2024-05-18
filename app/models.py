@@ -244,21 +244,25 @@ class Veterinary(models.Model):
 
         self.save()
 
-def validate_medicine(data):
+def validate_medicine(medicine_data):
     errors = {}
 
-    name = data.get("name", "")
-    description = data.get("description", "")
-    dose = data.get("dose", "")
+    if not medicine_data.get("name"):
+        errors["name"] = "El nombre es obligatorio."
 
-    if name == "":
-        errors["name"] = "Por favor ingrese un nombre"
+    if not medicine_data.get("description"):
+        errors["description"] = "La descripción es obligatoria."
 
-    if description == "":
-        errors["description"] = "Por favor ingrese una descripción"
-
-    if dose == "":
-        errors["dose"] = "Por favor ingrese una dosis"
+    dose = medicine_data.get("dose")
+    if not dose:
+        errors["dose"] = "La dosis es obligatoria."
+    else:
+        try:
+            dose = int(dose)
+            if dose <= 0:
+                errors["dose"] = "La dosis debe ser un número positivo."
+        except ValueError:
+            errors["dose"] = "La dosis debe ser un número entero válido."
 
     return errors
     
