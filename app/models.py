@@ -258,18 +258,18 @@ def validate_medicine(medicine_data):
         errors["description"] = "La descripción es obligatoria."
 
     try:
-        dose = int(dose)
+        dose = float(dose)
         if dose <= 0:
             errors["dose"] = "La dosis debe ser mayor a 0."
-    except (TypeError, ValueError):
-        errors["dose"] = "La dosis debe ser un número entero válido."
+    except ValueError:
+        errors["dose"] = "La dosis debe ser un número válido."
 
     return errors
     
 class Medicine(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
-    dose = models.IntegerField()
+    dose = models.FloatField()
 
     def __str__(self):
         return self.name
@@ -279,8 +279,7 @@ class Medicine(models.Model):
     def save_medicine(cls, medicine_data):
         errors = validate_medicine(medicine_data)
 
-
-        if len(errors.keys()) > 0:
+        if errors:
             return False, errors
 
         Medicine.objects.create(
@@ -292,8 +291,20 @@ class Medicine(models.Model):
         return True, "Medicamento creado exitosamente"
     
     def update_medicine(self, medicine_data):
-        self.name = medicine_data.get("name", "") or self.name
-        self.description = medicine_data.get("description", "") or self.description
-        self.dose = medicine_data.get("dose", "") or self.dose
+        name = medicine_data.get("name", "")
+        description = medicine_data.get("description", "")
+        dose = medicine_data.get("dose", "")
 
-        self.save()
+        errors = validate_medicine(medicine_data)
+
+        if errors:
+            return False, errors  # Devolver False y errores si hay problemas de validación
+
+        # Aplicar los cambios al objeto Medicine
+        self.name = name
+        self.description = description
+        self.dose = dose
+
+        self.save()  # Guardar los cambios en la base de datos
+
+        return True, "Medicamento actualizado exitosamente"
