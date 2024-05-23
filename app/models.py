@@ -75,7 +75,8 @@ def validate_provider(data):
 class Provider(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
-    
+    address = models.CharField(max_length=100, blank=True)
+
     def __str__(self):
         return self.name
 
@@ -89,6 +90,7 @@ class Provider(models.Model):
         Provider.objects.create(
             name=provider_data.get("name"),
             email=provider_data.get("email"),
+            address=provider_data.get("address"),
         )
 
         return True, None
@@ -96,5 +98,6 @@ class Provider(models.Model):
     def update_provider(self, provider_data):
         self.name = provider_data.get("name", "") or self.name
         self.email = provider_data.get("email", "") or self.email
+        self.address = provider_data.get("address", "") or self.address
 
         self.save()
