@@ -206,7 +206,7 @@ def validate_veterinary(data):
     email = data.get("email", "")
     phone = data.get("phone", "")
 
-    pattern_phone=r'^\+?[\d\s\-\(\)]+$'
+    pattern_phone=r'^\+?[\d\s\-\(\)]+'
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     elif email.count("@") == 0:
