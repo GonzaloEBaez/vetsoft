@@ -18,7 +18,7 @@ jobs:
               with:
                   python-version: '3.10'
                   cache: 'pip'
-            - run: pip install -r requirements-dev.txt
+            - run: pip install -r requirements.txt
 
             - name: Install playwright
               run: python -m playwright install --with-deps firefox
