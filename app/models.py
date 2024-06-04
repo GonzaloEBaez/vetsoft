@@ -111,11 +111,8 @@ class Provider(models.Model):
         self.email = provider_data.get("email", "") or self.email
         self.address = provider_data.get("address", "") or self.address
 
-        try:
-            self.save()
-            return True, None
-        except:
-            return False, errors
+        self.save()
+        return True, None
 
 
 
@@ -375,9 +372,7 @@ class Medicine(models.Model):
         self.description = medicine_data.get("description", "") or self.description
         self.dose = medicine_data.get("dose", "") or self.dose
 
-        try:
-            self.save()
-            return True, None
-        except:
-            return False, errors
+
+        self.save()
+        return True, None
     

@@ -1,4 +1,3 @@
-from django.forms import ValidationError
 from django.test import TestCase
 from app.models import Client,Pet,validate_pet,Provider, Product,Medicine
 from django.utils import timezone

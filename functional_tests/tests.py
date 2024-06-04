@@ -6,7 +6,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.urls import reverse
 
-from app.models import Client, Provider, Medicine, Pet
+from app.models import Client, Provider
 
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
@@ -393,8 +393,7 @@ class PetFormCreateValidationTestCase(PlaywrightTestCase):
         # Verifica si se muestra el mensaje de error esperado
         expect(self.page.get_by_text("La fecha de nacimiento debe ser menor a la fecha actual")).to_be_visible()     
 
-    def test_should_be_able_to_create_a_new_pet(self):
-        self.page.goto(f"{self.live_server_url}{reverse('pet_form')}")
+    
 
     # Pruebas para peso de la mascota
     def test_should_be_able_to_create_a_new_pet(self):
