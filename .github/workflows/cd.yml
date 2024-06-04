@@ -32,7 +32,7 @@ jobs:
                   context: .
                   file: ./Dockerfile
                   push: true
-                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/vetsoft:latest,${{ secrets.DOCKERHUB_USERNAME }}/vetsoft:${{ steps.get_date.outputs.date }}
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/vet-soft:latest,${{ secrets.DOCKERHUB_USERNAME }}/vet-soft:latest${{ steps.get_date.outputs.date }}
 
             - name: Deploy
               run: curl -X POST ${{ secrets.RENDER_HOOK }}
