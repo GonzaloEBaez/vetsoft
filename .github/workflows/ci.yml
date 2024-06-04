@@ -21,7 +21,8 @@ jobs:
             - run: pip install -r requirements.txt
 
             - name: Install playwright
-              run: python -m playwright install --with-deps firefox
+              run: playwright install
+              
 
             - name: Run static test
               run: ruff check
