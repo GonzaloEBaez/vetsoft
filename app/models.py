@@ -5,16 +5,6 @@ from django.core.exceptions import ValidationError
 
 def validate_client(data):
     """
-    Valida los datos del cliente.
-
-    Args:
-        data (dict): Datos del cliente.
-
-    Returns:
-        dict: Diccionario de errores encontrados.
-    """
-def validate_client(data):
-    """
     Esta función valida los datos del cliente.
     """
     errors = {}
