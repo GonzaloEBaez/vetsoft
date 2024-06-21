@@ -114,6 +114,20 @@ class ClientModelTest(TestCase):
 
         self.assertEqual(str(client_updated.phone), "54221555232")
 
+    def test_validate_client_incorrect_city(self):
+        """
+        Prueba que verifica que no se pueda crear un cliente con una ciudad que no este en las opciones dadas 
+        """
+        data = {
+            "name": "Juan Sebastian Veron 11",
+            "phone": "54221555232",
+            "city": "Rosario",
+            "email": "brujita75@hotmail.com",
+        }
+
+        result = validate_client(data)
+
+        self.assertIn("Por favor ingrese una ciudad valida", result.values())
 
     def test_validate_client_incorrect_name(self):
         """
