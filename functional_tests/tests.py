@@ -316,6 +316,23 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
+    def test_should_show_message_if_city_is_not_selected(self):
+        """
+        Esta función verifica que se muestre un mensaje de error cuando se intenta 
+        crear un cliente sin seleccionar ciudad
+        """
+        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+
+        expect(self.page.get_by_role("form")).to_be_visible()
+
+        self.page.get_by_label("Nombre").fill("Angel")
+        self.page.get_by_label("Teléfono").fill("542226836789")
+        self.page.get_by_label("Email").fill("fideo@vetsoft.com")
+        # no selecciono una ciudad
+        self.page.get_by_role("button", name="Guardar").click()
+
+        # Verifica si se muestra el mensaje de error esperado
+        expect(self.page.get_by_text("Por favor ingrese una ciudad")).to_be_visible()
 
 
 class MedicineCreateEditTestCase(PlaywrightTestCase):
