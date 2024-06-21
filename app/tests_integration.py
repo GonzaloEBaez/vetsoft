@@ -169,7 +169,7 @@ class ClientsTest(TestCase):
         )
     
 
-        self.client.post(
+        response = self.client.post(
             reverse("clients_form"),
             data={
                 "id": client.id,
@@ -180,9 +180,7 @@ class ClientsTest(TestCase):
             },
         )
 
-        # redirect after post
-        editedClient = Client.objects.get(pk=client.id)
-        self.assertEqual(editedClient.city, "La Plata")
+        self.assertContains(response, "Por favor ingrese una ciudad valida")
 
     def test_validation_invalid_name_client(self):
         """
