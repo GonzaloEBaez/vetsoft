@@ -156,6 +156,23 @@ class ClientsTest(TestCase):
         self.assertEqual(str(editedClient.phone), "54221456789")
         self.assertEqual(editedClient.city, "Berisso")
 
+    def test_create_user_with_invalid_data_test_city(self):
+        """
+        Se testea la función crear con datos de ciudad invalido.
+        """
+
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Juan Sebastian Veron",
+                "phone": "54221456789",
+                "city": "Rosario",
+                "email": "brujita75@vetsoft.com",
+            },
+        )
+
+        self.assertContains(response, "Por favor ingrese una ciudad valida")
+
     def test_edit_user_with_invalid_data_test_city(self):
         """
         Se testea la función editar con datos de ciudad invalido.
