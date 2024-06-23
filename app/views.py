@@ -1,4 +1,5 @@
-from django.shortcuts import get_object_or_404, redirect, render, reverse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from .models import CityEnum, Client, Medicine, Pet, Product, Provider, Veterinary
 
@@ -38,10 +39,11 @@ def clients_form(request, id=None):
                 saved = True
 
         if saved:
+            """print("Saved successfully! Redirecting to clients_repo...")"""
             return redirect(reverse("clients_repo"))
-
-        return render(
-            request, "clients/form.html", {"errors": errors, "client": request.POST, "ciudades": ciudades},)
+        else:
+            """print("Error saving client! Errors:", errors"""
+            return render(request, "clients/form.html", {"errors": errors, "client": request.POST, "ciudades": ciudades})
 
     client = None
     if id is not None:
