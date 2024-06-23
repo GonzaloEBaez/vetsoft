@@ -335,7 +335,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("El nombre debe contener solo letras y espacios")).to_be_visible()
         
 
-   def test_should_show_message_if_city_is_not_selected(self):
+    def test_should_show_message_if_city_is_not_selected(self):
         """
         Esta función verifica que se muestre un mensaje de error cuando se intenta 
         crear un cliente sin seleccionar ciudad
