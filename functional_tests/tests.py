@@ -316,15 +316,31 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
+
+    def test_should_view_errors_if_name_is_invalid(self):
+        """
+        Esta función verifica que muestre un mesnaje de error para un nombre invalido.
+        """
+        
+        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+
+        expect(self.page.get_by_role("form")).to_be_visible()
+        
+        self.page.get_by_label("Nombre").fill("manu22")
+        self.page.get_by_label("Teléfono").fill("54221555232")
+        self.page.get_by_label("Email").fill("brujita75@vetsoft.com")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
+
+        self.page.get_by_role("button", name="Guardar").click()
+        
+        expect(self.page.get_by_text("El nombre debe contener solo letras y espacios")).to_be_visible()
+        
+
     def test_should_show_message_if_city_is_not_selected(self):
         """
         Esta función verifica que se muestre un mensaje de error cuando se intenta 
         crear un cliente sin seleccionar ciudad
         """
-        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
-
-        expect(self.page.get_by_role("form")).to_be_visible()
-
         self.page.get_by_label("Nombre").fill("Angel")
         self.page.get_by_label("Teléfono").fill("542226836789")
         self.page.get_by_label("Email").fill("fideo@vetsoft.com")
