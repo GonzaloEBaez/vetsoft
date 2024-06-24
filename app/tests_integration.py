@@ -96,6 +96,7 @@ class ClientsTest(TestCase):
     def test_validation_invalid_email_whit_vetsoft(self):
         """
         Esta función testea la validación de emails invalidos.
+        agregando la validacion de que deba tener texto delante del @vetsoft.com
         """
         response = self.client.post(
             reverse("clients_form"),
@@ -110,7 +111,7 @@ class ClientsTest(TestCase):
      
     def test_validation_email_null(self):
         """
-        Esta función testea la validación de emails invalidos.
+        Esta función testea la validación de emails nulos.
         """
         response = self.client.post(
             reverse("clients_form"),
