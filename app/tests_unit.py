@@ -216,7 +216,10 @@ class ClientModelTest(TestCase):
         self.assertEqual(client_updated.name, "Juan Sebastian Veron")
 
     def test_invalid_email_no_text_before_at(self):
-        #Test agregado del email del cliente
+        """
+        Test agregado del email del cliente
+        Verifica que deba haber texto delante del @vetsoft
+        """
         data = {
                 "name": "Gonza",
                 "phone": "54221555232",
@@ -228,6 +231,10 @@ class ClientModelTest(TestCase):
         self.assertIn("El email debe tener un formato válido y ser de la forma nombre@vesoft.com", errors.values())
 
     def test_invalid_email_not_ending_with_com(self):
+
+        """
+        Verifica que el correo termine en .com, por mas de que ingrese un email valido cotidianamente.
+        """
         data = {
                 "name": "Gonza",
                 "phone": "54221555232",
