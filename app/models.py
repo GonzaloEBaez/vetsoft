@@ -41,9 +41,10 @@ def validate_client(data):
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
-    elif "@vetsoft.com" not in email:
-        errors["email"] = "El email debe ser de la forma @vetsoft.com"
-
+    elif not re.match(r"^[a-zA-Z0-9._%+-]+@vetsoft\.com$", email):
+        errors["email"] = "El email debe tener un formato válido y ser de la forma nombre@vesoft.com"
+    
+    
     if city == "" or city is None:
         errors["city"] = "Por favor ingrese una ciudad"
     elif city not in dict(CityEnum.choices):

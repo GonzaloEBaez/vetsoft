@@ -92,9 +92,11 @@ class ClientsTest(TestCase):
         response = self.client.get(reverse("clients_edit", kwargs={"id": 100}))
         self.assertEqual(response.status_code, 404)
 
-    def test_validation_invalid_email(self):
+    #Test pra comprobar que tenga texto delante de @vetsoft.com
+    def test_validation_invalid_email_whit_vetsoft(self):
         """
         Esta función testea la validación de emails invalidos.
+        agregando la validacion de que deba tener texto delante del @vetsoft.com
         """
         response = self.client.post(
             reverse("clients_form"),
@@ -102,11 +104,25 @@ class ClientsTest(TestCase):
                 "name": "Juan Sebastian Veron",
                 "phone": 54221555232,
                 "city": "La Plata",
-                "email": "brujita75",
+                "email": "@vetsoft.com",
             },
         )
-        self.assertContains(response, "El email debe ser de la forma @vetsoft.com")
+        self.assertContains(response, "El email debe tener un formato válido y ser de la forma nombre@vesoft.com")
      
+    def test_validation_email_null(self):
+        """
+        Esta función testea la validación de emails nulos.
+        """
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Juan Sebastian Veron",
+                "phone": 54221555232,
+                "city": "La Plata",
+                "email": "",
+            },
+        )
+        self.assertContains(response, "Por favor ingrese un email")
 
 
     def test_validation_invalid_phone(self):

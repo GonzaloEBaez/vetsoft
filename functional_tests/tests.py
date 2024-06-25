@@ -276,7 +276,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         ).not_to_be_visible()
 
         expect(
-            self.page.get_by_text("El email debe ser de la forma @vetsoft.com"),
+            self.page.get_by_text("El email debe tener un formato válido y ser de la forma nombre@vesoft.com"),
         ).to_be_visible()
 
     def test_should_be_able_to_edit_a_client(self):
@@ -316,43 +316,61 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
-
-    def test_should_view_errors_if_name_is_invalid(self):
+    #Tests agregados para validacion de email.
+    def test_should_view_errors_if_form_is_invalid_email(self):
         """
-        Esta función verifica que muestre un mesnaje de error para un nombre invalido.
+        Esta función  verifica que se muestren los errores de validación en el email del
+        formulario si se envían datos inválidos al intentar crear un nuevo cliente.
         """
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
 
         expect(self.page.get_by_role("form")).to_be_visible()
 
-        self.page.get_by_label("Nombre").fill("manu22")
+        #Ingreso datos vacios
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("Por favor ingrese un nombre")).to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese un teléfono")).to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese un email")).to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese una ciudad")).to_be_visible()
+
+        #Ingreso un email vacio
+        self.page.get_by_label("Nombre").fill("Gonzalo")
         self.page.get_by_label("Teléfono").fill("54221555232")
-        self.page.get_by_label("Email").fill("brujita75@vetsoft.com")
+        self.page.get_by_label("Email").fill("")
         self.page.get_by_label("Ciudad").select_option("La Plata")
 
         self.page.get_by_role("button", name="Guardar").click()
 
-        expect(self.page.get_by_text("El nombre debe contener solo letras y espacios")).to_be_visible()
-        
+        expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese un teléfono")).not_to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese una ciudad")).not_to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese un email")).to_be_visible()
 
-    def test_should_show_message_if_city_is_not_selected(self):
-        """
-        Esta función verifica que se muestre un mensaje de error cuando se intenta 
-        crear un cliente sin seleccionar ciudad
-        """
-        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+        # Ingresar un email erróneo
+        self.page.get_by_label("Nombre").fill("Gonzalo")
+        self.page.get_by_label("Teléfono").fill("54221555232")
+        self.page.get_by_label("Email").fill("@vetsoft.net")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
 
-        expect(self.page.get_by_role("form")).to_be_visible()
-
-        self.page.get_by_label("Nombre").fill("Angel")
-        self.page.get_by_label("Teléfono").fill("542226836789")
-        self.page.get_by_label("Email").fill("fideo@vetsoft.com")
-        # no selecciono una ciudad
         self.page.get_by_role("button", name="Guardar").click()
 
-        # Verifica si se muestra el mensaje de error esperado
-        expect(self.page.get_by_text("Por favor ingrese una ciudad")).to_be_visible()
+        expect(self.page.get_by_text("Por favor ingrese un email")).not_to_be_visible()
+        expect(self.page.get_by_text("El email debe tener un formato válido y ser de la forma nombre@vesoft.com")).to_be_visible()
 
+        # Ingreso un email válido
+        self.page.get_by_label("Nombre").fill("Gonzalo")
+        self.page.get_by_label("Teléfono").fill("54221555232")
+        self.page.get_by_label("Email").fill("gonza@vetsoft.com")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
+    
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("Gonzalo")).to_be_visible()
+        expect(self.page.get_by_text("54221555232")).to_be_visible()
+        expect(self.page.get_by_text("gonza@vetsoft.com")).to_be_visible()
+        expect(self.page.get_by_text("La Plata")).to_be_visible()
+        
 
 class MedicineCreateEditTestCase(PlaywrightTestCase):
     """
