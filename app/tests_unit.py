@@ -260,6 +260,10 @@ class ClientModelTest(TestCase):
         self.assertIn("El email debe tener un formato válido y ser de la forma nombre@vesoft.com", errors.values())
 
     def test_phone_number_without_54(self):
+        """
+        La funcion verifica que el numero no tenga 54
+
+        """
         client_data = {
             "name": "Juan Sebastian Veron",
             "phone": "2245556789",
