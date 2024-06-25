@@ -371,6 +371,25 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("gonza@vetsoft.com")).to_be_visible()
         expect(self.page.get_by_text("La Plata")).to_be_visible()
         
+    def test_should_show_error_for_phone_whitout_54(self):
+        """
+        Esta función verifica que se muestre un mensaje de error cuando se intenta 
+        crear un cliente con un numero sin el 54 
+        """
+        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+
+        expect(self.page.get_by_role("form")).to_be_visible()
+
+        self.page.get_by_label("Nombre").fill("Guido Carrillo")
+        self.page.get_by_label("Teléfono").fill("221232555")
+        self.page.get_by_label("Email").fill("goleador@vetsoft.com")
+        self.page.get_by_label("Ciudad").select_option("Berisso")
+
+        self.page.get_by_role("button", name="Guardar").click()
+
+        # Verifica si se muestra el mensaje de error esperado
+        expect(self.page.get_by_text("El telefono debe comenzar con 54")).to_be_visible()
+
 
 class MedicineCreateEditTestCase(PlaywrightTestCase):
     """
