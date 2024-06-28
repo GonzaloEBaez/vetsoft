@@ -274,6 +274,21 @@ class ClientModelTest(TestCase):
         self.assertIn("phone", errors)
         self.assertEqual(errors["phone"], "El telefono debe comenzar con 54")
 
+    def test_phone_number_with_a_letter(self):
+        """
+        La funcion verifica que el campo solo tengo caracteres numericos
+
+        """
+        client_data = {
+            "name": "Juan Sebastian Veron",
+            "phone": "a2245556789",
+            "city": "La Plata",
+            "email": "brujita75@vetsoft.com",
+        }
+        errors = validate_client(client_data)
+        self.assertIn("phone", errors)
+        self.assertEqual(errors["phone"], "El teléfono solo debe contener números")
+
 class MedicineModelTest(TestCase):
     """
     Pruebas para el modelo Medicina.

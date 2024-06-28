@@ -390,6 +390,29 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         # Verifica si se muestra el mensaje de error esperado
         expect(self.page.get_by_text("El telefono debe comenzar con 54")).to_be_visible()
 
+def test_should_show_error_for_phone_with_characters(self):
+        """
+        Verifica que se muestre un mensaje de error al intentar crear un cliente con un teléfono no numérico.
+        """
+        url = reverse('clients_form')
+        data = {
+            "name": "Guido Carrillo",
+            "phone": "aa54221232555",  # Teléfono con caracteres no numéricos
+            "email": "goleador@vetsoft.com",
+            "city": "Berisso",
+        }
+
+        response = self.client.post(url, data, follow=True)
+
+        # Verificar que se ha mostrado el mensaje de error esperado en la respuesta
+        self.assertContains(response, "El teléfono solo debe contener números")
+
+        # Verificar que no se ha creado un cliente en la base de datos
+        clients = Client.objects.filter(name="Guido Carrillo")
+        self.assertEqual(clients.count(), 0)
+
+        # Verificar que estamos en la página correcta después del envío del formulario
+        self.assertTemplateUsed(response, 'clients_form.html')
 
 class MedicineCreateEditTestCase(PlaywrightTestCase):
     """
